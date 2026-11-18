@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Log in · Secure Compiler{% endblock %}
+{% block css %}
+.auth{max-width:420px;margin:7vh auto 0;perspective:900px}
+.auth .card{animation:flip .9s cubic-bezier(.2,.8,.2,1) both;transform-origin:50% 100%}
+@keyframes flip{from{transform:rotateX(-70deg) translateY(40px);opacity:0}}
+.auth h1{font-size:2rem;margin-bottom:4px}.auth p{color:var(--mut);margin-bottom:20px}
+.auth input{width:100%;font:inherit;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px;transition:border-color .3s,box-shadow .3s}
+.auth input:focus{outline:0;border-color:var(--a1);box-shadow:0 0 0 4px color-mix(in srgb,var(--a1) 22%,transparent)}
+.auth .btn.main{width:100%}.auth .alt{margin-top:16px;text-align:center;color:var(--mut)}.auth .alt a{color:var(--a1)}
+{% endblock %}
+{% block content %}
+<div class="auth"><form class="card" method="post" data-fx>
+  <h1>Welcome back</h1><p>Log in to scan your code for security problems.</p>
+  <input name="username" placeholder="Username" autocomplete="username" required>
+  <input name="password" type="password" placeholder="Password" autocomplete="current-password" required>
+  <button class="btn main">Log in</button>
+  <div class="alt">New here? <a href="{{ url_for('register') }}">Create an account</a></div>
+</form></div>
+{% endblock %}

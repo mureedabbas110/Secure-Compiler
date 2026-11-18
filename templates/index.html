@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block css %}
+h1.hero{font-size:clamp(2.4rem,7vw,4.8rem);line-height:1;letter-spacing:-.03em;margin:10px 0 8px;font-weight:700}
+.sub{color:var(--mut);max-width:560px;margin-bottom:34px}
+h2.step{font-size:1.1rem;margin:30px 0 12px;display:flex;gap:10px;align-items:center}
+h2.step span{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--a1),var(--a2));color:#06101a;display:grid;place-items:center;font-size:.8rem}
+.langs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.lang{cursor:pointer;text-align:center;padding:22px 10px;border-radius:16px;border:1px solid var(--line);background:var(--card);backdrop-filter:blur(10px)}
+.lang big{display:block;font:700 2rem 'JetBrains Mono',monospace;color:var(--a1)}
+.lang small{color:var(--mut)}
+.lang.on{border-color:var(--a1);box-shadow:0 0 0 2px var(--a1),0 18px 40px -16px var(--a1)}
+textarea{width:100%;min-height:260px;resize:vertical;font:13px/1.55 'JetBrains Mono',monospace;color:var(--fg);background:color-mix(in srgb,var(--bg) 70%,transparent);border:1px solid var(--line);border-radius:12px;padding:14px;tab-size:4}
+textarea:focus{outline:0;border-color:var(--a1)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center}
+#res{margin-top:34px;display:none}
+.gauge{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.ring{position:relative;width:150px;height:150px}.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:11;stroke-linecap:round}
+.ring .bgc{stroke:var(--line)}.ring .fg{transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:2.2rem}
+.pill{padding:3px 10px;border-radius:99px;font-size:.78rem;font-weight:700;color:#fff}
+.tabs{display:flex;gap:6px;margin:24px 0 14px;flex-wrap:wrap}
+.tab{border-radius:99px}.tab.on{background:linear-gradient(120deg,var(--a1),var(--a2));color:#06101a;border:0;font-weight:700}
+.pane{display:none;animation:pop .45s}.pane.on{display:block}
+.fi{border-left:4px solid var(--a1);margin-bottom:12px;padding:14px 16px;border-radius:12px;background:var(--card);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);animation:slide .5s both}
+@keyframes slide{from{opacity:0;transform:translateX(-24px) rotateY(12deg)}}
+.fi h4{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.fi code,pre{font-family:'JetBrains Mono',monospace;font-size:.82rem}
+.lex{background:color-mix(in srgb,var(--hi) 18%,transparent);color:var(--hi);padding:1px 7px;border-radius:6px}
+.fi .ev{color:var(--mut);margin:6px 0}.fi .fix{color:var(--a1);margin-top:6px}
+.wrap{overflow-x:auto;max-height:480px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)}
+th{position:sticky;top:0;background:var(--bg2)}td{font-family:'JetBrains Mono',monospace}
+details{margin-left:14px;font:.82rem 'JetBrains Mono',monospace}summary{cursor:pointer;padding:2px 0;color:var(--a1)}
+.leaf{margin-left:18px;color:var(--mut)}
+pre{background:color-mix(in srgb,var(--bg) 70%,transparent);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto;white-space:pre-wrap;margin:6px 0 14px}
+.err{border-color:var(--hi)!important}
+.spin{display:none;width:18px;height:18px;border:3px solid #0003;border-top-color:#06101a;border-radius:50%;animation:spin .7s linear infinite}
+.busy .spin{display:inline-block}.busy{pointer-events:none;opacity:.85}
+#breach{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);display:none;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;color:#2dff6f;cursor:pointer;overflow:hidden}
+#breach.on{display:flex}#breach.shake{animation:shk .35s}
+@keyframes shk{20%{transform:translate(-14px,6px) skew(3deg)}40%{transform:translate(12px,-8px) skew(-3deg)}60%{transform:translate(-8px,4px)}80%{transform:translate(6px,-3px)}}
+#rain{position:absolute;inset:0;opacity:.35}
+#btitle{position:relative;font-size:clamp(1.6rem,6vw,4rem);font-weight:700;letter-spacing:.08em;animation:gl .25s infinite;text-align:center}
+@keyframes gl{0%,100%{text-shadow:3px 0 #f0f,-3px 0 #0ff}50%{text-shadow:-4px 0 #f0f,4px 0 #0ff;transform:translateX(3px)}}
+#bbarw{position:relative;width:min(520px,80vw);height:6px;background:#2dff6f33;margin:22px 0;overflow:hidden}#bbar{height:100%;width:0;background:#2dff6f;box-shadow:0 0 18px #2dff6f}
+#blog{position:relative;width:min(560px,88vw);font-size:.95rem;line-height:1.9}
+#blog .HIGH{color:#ff3355;text-shadow:0 0 10px #ff3355}#blog .MEDIUM{color:#ffb020}#blog div{animation:pop .2s}
+#bhint{position:absolute;bottom:18px;color:#2dff6f88;font-size:.75rem}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:800px){.split{grid-template-columns:1fr}}
+.lab{color:var(--mut);font-size:.8rem;margin:0 0 6px}
+#srcv{max-height:340px;overflow:auto;position:relative;white-space:pre}#srcv .dn{opacity:.4}
+mark{background:var(--a1);color:#06101a;border-radius:4px;padding:0 3px;box-shadow:0 0 14px var(--a1)}
+#tkw{max-height:340px}tr.new{animation:slide .4s both;background:color-mix(in srgb,var(--a1) 14%,transparent)}
+.nd{padding:2px 0 2px 10px;border-left:1px solid var(--line);font:.82rem 'JetBrains Mono',monospace;animation:pop .3s}.nd b{color:var(--a1)}.nd i{color:var(--a2);font-style:normal}
+.pbar{position:sticky;top:58px;z-index:15;margin-top:16px;padding:14px 18px}
+.prow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:.85rem}.prow label{display:flex;gap:6px;align-items:center;color:var(--mut)}
+.prow select{font:inherit;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:4px}.prow input[type=range]{width:90px}
+#narr{min-height:2.7em;margin:12px 0 8px;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,var(--a1) 12%,transparent);border:1px solid var(--line)}
+#progw{height:4px;background:var(--line);border-radius:3px}#prog{height:100%;width:0;background:linear-gradient(90deg,var(--a1),var(--a2));transition:width .25s}.bad{color:var(--hi)}
+{% endblock %}
+{% block content %}
+<h1 class="hero" id="hero">Secure Compiler</h1>
+<p class="sub">Pick a language, paste or upload your code, and see the tokens, syntax tree, symbols and security risks found in it.</p>
+
+<h2 class="step"><span>1</span>Choose a language</h2>
+<div class="langs" id="langs">
+  <div class="lang" data-l="c" tabindex="0"><big>C</big><small>PLY lexer + parser</small></div>
+  <div class="lang" data-l="cpp" tabindex="0"><big>C++</big><small>PLY lexer + parser</small></div>
+  <div class="lang" data-l="python" tabindex="0"><big>Py</big><small>Python ast engine</small></div>
+  <div class="lang" data-l="java" tabindex="0"><big>Java</big><small>Pattern engine</small></div>
+</div>
+
+<h2 class="step"><span>2</span>Add your code</h2>
+<div class="card">
+  <textarea id="code" spellcheck="false" placeholder="Paste source code here, load a sample, or upload a file."></textarea>
+  <div class="row">
+    <label class="btn"><input type="checkbox" id="fx" checked> Breach intro</label>
+    <button class="btn" id="demo" title="Types a sample by itself and analyzes it">Auto demo</button>
+    <button class="btn" id="sample">Load sample</button>
+    <label class="btn">Upload file<input type="file" id="file" accept=".c,.cpp,.cc,.cxx,.h,.hpp,.py,.java" hidden></label>
+    <button class="btn" id="clear">Clear</button>
+    <div class="sp"></div>
+    <button class="btn main" id="go"><span class="spin"></span>Analyze code</button>
+  </div>
+  <div id="err"></div>
+</div>
+
+<div id="breach"><canvas id="rain"></canvas><div id="btitle"></div><div id="bbarw"><div id="bbar"></div></div><div id="blog"></div><div id="bhint">click to skip</div></div>
+<section id="res">
+  <div class="card gauge" id="gauge"></div>
+  <div class="card pbar" id="pbar"><div class="prow">
+  <button class="btn" id="bRe">Replay</button><button class="btn" id="bPa">Pause</button><button class="btn" id="bNx">Next step</button><button class="btn" id="bSk">Skip to end</button>
+  <label>Mode <select id="sMode"><option value="0">Auto</option><option value="1">Step by step</option></select></label>
+  <label>Speed <input type="range" id="sSp" min="0.25" max="4" step="0.25"><b id="vSp"></b></label>
+  <label>Text size <input type="range" id="sFs" min="0.7" max="1.6" step="0.05"></label>
+  <label>Screen <select id="sPre"><option value="">Custom</option><option value="laptop">Laptop</option><option value="proj">Projector</option><option value="mobile">Mobile</option></select></label>
+  <label><input type="checkbox" id="sWd"> Full width</label><label><input type="checkbox" id="sSn"> Sound</label>
+ </div><div id="narr">Pick a tab to watch it run step by step.</div><div id="progw"><div id="prog"></div></div></div>
+ <div class="tabs" id="tabs"></div>
+  <div id="panes"></div>
+</section>
+{% endblock %}
+{% block js %}
+<script>
+const $=s=>document.querySelector(s), SAMPLES={
+c:`int main() {\n    char password[32] = "super_secret_123";\n    char user_input[100];\n    int uninit_num;\n    int calculated = uninit_num + 10;\n\n    gets(user_input);\n    printf(user_input);\n    strcpy(user_input, "dangerous");\n    return 0;\n}`,
+cpp:`int main() {\n    char token[32] = "admin_master_cpp_token";\n    char buffer[64];\n    int* leak_ptr = new int[50];\n\n    gets(buffer);\n    printf(buffer);\n    return 0;\n}`,
+python:`import os\nimport pickle\n\nadmin_token = "secret_api_token_xyz"\n\ndef run_query(user_val):\n    sql = "SELECT * FROM users WHERE id = " + user_val\n    os.system("echo " + user_val)\n    data = pickle.loads(b"cos\\nsystem\\n(S'ls'\\ntR.")\n    eval("2 + 2")\n`,
+java:`public class VulnerabilityDemo {\n    public static void main(String[] args) {\n        String apiKey = "AIzaSyD-1234567890Secret";\n        String userInput = args[0];\n\n        Runtime.getRuntime().exec("ping " + userInput);\n        String sql = "SELECT * FROM accounts WHERE id = " + userInput;\n        stmt.executeQuery(sql);\n    }\n}`};
+let lang=null,last=null;
+/* hero: letters scramble into place once on load */
+(()=>{const el=$('#hero'),t=el.textContent,ch='!<>-_\\/[]{}=+*^?#';let f=0;
+ const id=setInterval(()=>{el.textContent=[...t].map((c,i)=>i<f/2?c:(c===' '?' ':ch[Math.random()*ch.length|0])).join('');if(++f>t.length*2+2){clearInterval(id);el.textContent=t}},38)})();
+document.querySelectorAll('.lang').forEach(c=>{tilt(c);const pick=()=>{document.querySelectorAll('.lang').forEach(x=>x.classList.remove('on'));c.classList.add('on');lang=c.dataset.l;blip(520);pulse();DEMO++;const ta=$('#code'),v=ta.value.trim();
+  if(Object.values(SAMPLES).some(s=>s.trim()===v))ta.value='';$('#res').style.display='none';$('#err').innerHTML='';stop()};c.onclick=pick;c.onkeydown=e=>e.key==='Enter'&&pick()});
+$('#sample').onclick=()=>{if(!lang)return showErr('Choose a language first.');$('#code').value=SAMPLES[lang];$('#err').innerHTML='';blip(700)};
+let DEMO=0;
+$('#demo').onclick=async()=>{if(!lang)return showErr('Choose a language first, then press Auto demo.');
+ const my=++DEMO,t=SAMPLES[lang],ta=$('#code');ta.value='';$('#err').innerHTML='';
+ for(let k=0;k<t.length&&my===DEMO;k+=2){ta.value+=t.slice(k,k+2);ta.scrollTop=1e5;if(k%6===0)blip(300+Math.random()*500);await new Promise(r=>setTimeout(r,16))}
+ if(my===DEMO)$('#go').click()};
+addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')$('#go').click()});
+$('#clear').onclick=()=>{DEMO++;$('#code').value='';$('#res').style.display='none';$('#err').innerHTML='';stop();TT=[]};
+$('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;const x=f.name.split('.').pop().toLowerCase();
+ const m={c:'c',h:'cpp',hpp:'cpp',cpp:'cpp',cc:'cpp',cxx:'cpp',py:'python',java:'java'}[x];
+ if(m){lang=m;document.querySelectorAll('.lang').forEach(c=>c.classList.toggle('on',c.dataset.l===m))}
+ const r=new FileReader();r.onload=()=>$('#code').value=r.result;r.readAsText(f);e.target.value=''};
+const sfx=(()=>{let c;const A=()=>c||(c=new (window.AudioContext||window.webkitAudioContext)());
+const tone=(t,f,d,v,f2)=>{const a=A(),o=a.createOscillator(),g=a.createGain();o.type=t;o.frequency.setValueAtTime(f,a.currentTime);if(f2)o.frequency.linearRampToValueAtTime(f2,a.currentTime+d);g.gain.setValueAtTime(v,a.currentTime);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+d);o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+d)};
+return{tick:()=>tone('square',1200,.04,.03),beep:f=>tone('square',f,.12,.05),siren(){for(let k=0;k<4;k++)setTimeout(()=>tone('sawtooth',500,.4,.06,900),k*400);tone('sine',70,.8,.4,35)},chime(){[523,659,784,1047].forEach((f,k)=>setTimeout(()=>tone('sine',f,.8,.08),k*130))}}})();
+let rt;function rain(on){const c=$('#rain'),x=c.getContext('2d');clearInterval(rt);if(!on){x.clearRect(0,0,c.width,c.height);return}c.width=innerWidth;c.height=innerHeight;const y=Array(Math.floor(c.width/16)).fill(0);
+ rt=setInterval(()=>{x.fillStyle='rgba(0,0,0,.12)';x.fillRect(0,0,c.width,c.height);x.fillStyle='#2dff6f';x.font='14px monospace';y.forEach((v,k)=>{x.fillText(String.fromCharCode(33+Math.random()*90),k*16,v);y[k]=v>c.height&&Math.random()>.97?0:v+16})},50)}
+async function breach(d){if(!$('#fx').checked)return;
+ const o=$('#breach'),L=$('#blog'),T=$('#btitle'),rp=d.risk_profile||{score:0,level:'CLEAN'},f=d.findings||[],sl=ms=>new Promise(r=>setTimeout(r,ms));let skip=false;o.onclick=()=>skip=true;
+ o.classList.add('on');L.innerHTML='';T.textContent='SCANNING SOURCE';$('#bbar').style.width='0';rain(true);
+ for(let p=0;p<=100&&!skip;p+=4){$('#bbar').style.width=p+'%';if(p%20===0)sfx.tick();await sl(35)}
+ T.textContent=f.length?'THREATS DETECTED':'ALL CLEAR';
+ for(const x of f.slice(0,8)){if(skip)break;L.innerHTML+=`<div class="${x.severity}">[!] line ${x.line} &nbsp; ${esc(x.lexeme||x.title)} &nbsp; ${esc(x.severity)}</div>`;sfx.beep(x.severity==='HIGH'?440:660);o.classList.remove('shake');void o.offsetWidth;o.classList.add('shake');if(x.severity==='HIGH')alarm();await sl(430)}
+ T.textContent='RISK '+rp.level+' '+rp.score+'/100';f.length?sfx.siren():sfx.chime();if(!skip)await sl(1900);
+ o.classList.remove('on');rain(false)}
+function showErr(m,stage){$('#err').innerHTML=`<div class="msg error">${stage?'<b>'+esc(stage)+':</b> ':''}${esc(m)}</div>`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('#go').onclick=async()=>{
+ if(!lang)return showErr('Choose a language first.');
+ const code=$('#code').value;if(!code.trim())return showErr('Add some code first.');
+ const b=$('#go');b.classList.add('busy');$('#err').innerHTML='';pulse();
+ try{const r=await fetch('/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,language:lang})});
+  if(r.redirected||r.status===401){location.href='/login';return}
+  const d=await r.json();
+  if(!d.success){$('#res').style.display='none';return showErr((d.errors||['Analysis failed.']).join(' | '),d.stage)}
+  last=d;await breach(d);render(d)}
+ catch(e){showErr('Could not reach the server. Is it still running?')}
+ finally{b.classList.remove('busy')}};
+function render(d){
+ const rp=d.risk_profile||{score:0,level:'CLEAN',summary:'',counts:{}},col=rp.pdf_color||cv('--a1');
+ $('#res').style.display='block';
+ const C=2*Math.PI*62;
+ $('#gauge').innerHTML=`<div class="ring"><svg width="150" height="150"><circle class="bgc" cx="75" cy="75" r="62"/><circle class="fg" cx="75" cy="75" r="62" stroke="${col}" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><b id="num">0</b></div>
+ <div style="flex:1;min-width:240px"><h2>${esc(rp.level)} risk <small style="color:var(--mut);font-weight:400">${esc(d.language||'')}</small></h2>
+ <p style="color:var(--mut);margin:6px 0 12px">${esc(rp.summary||'')}</p>
+ <span class="pill" style="background:var(--hi)">High ${rp.counts?.HIGH||0}</span> <span class="pill" style="background:var(--med)">Medium ${rp.counts?.MEDIUM||0}</span> <span class="pill" style="background:var(--lo)">Total ${(d.findings||[]).length}</span>
+ <div class="row"><button class="btn" id="pdf">Download PDF report</button></div></div>`;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{$('.ring .fg').style.strokeDashoffset=C*(1-rp.score/100)}));
+ let n=0;const t=setInterval(()=>{n+=Math.max(1,rp.score/40);if(n>=rp.score){n=rp.score;clearInterval(t)}$('#num').textContent=Math.round(n)},30);
+ $('#pdf').onclick=pdf;
+ buildTabs(d);
+ $('#res').scrollIntoView({behavior:'smooth'})}
+function fin(a){if(!a.length)return '<div class="card">No security problems found. Nice and clean.</div>';
+ const sc={HIGH:'--hi',MEDIUM:'--med'};
+ return a.map((f,i)=>`<div class="fi" style="border-left-color:var(${sc[f.severity]||'--lo'});animation-delay:${i*70}ms"><h4><span class="pill" style="background:var(${sc[f.severity]||'--lo'})">${esc(f.severity)}</span>${esc(f.title)}<small style="color:var(--mut)">${esc(f.rule_id)} · line ${esc(f.line)}</small></h4>
+ <code class="lex">${esc(f.lexeme||'N/A')}</code><div class="ev"><code>${esc(f.evidence||'')}</code></div><div>${esc(f.description||'')}</div><div class="fix"><b>Fix:</b> ${esc(f.recommendation||'')}</div></div>`).join('')}
+function tbl(h,r){return `<div class="card wrap"><table><thead><tr>${h.map(x=>'<th>'+x+'</th>').join('')}</tr></thead><tbody>${r.map(x=>'<tr>'+x.map(y=>'<td>'+esc(y)+'</td>').join('')+'</tr>').join('')}</tbody></table></div>`}
+function tree(o,k,open){if(o===null||typeof o!=='object')return `<div class="leaf">${esc(k)}: ${esc(o)}</div>`;
+ const lab=o.type||o.node_type||o.name||'';
+ return `<details${open?' open':''}><summary>${esc(k)}${lab?' <span style="color:var(--a2)">'+esc(lab)+'</span>':''}</summary>${Object.entries(o).map(([a,b])=>tree(b,a)).join('')}</details>`}
+function trans(t){return Object.entries(t).map(([k,v])=>{const s=typeof v==='string'?v:(v&&(v.code||v.output))||JSON.stringify(v,null,2);return `<h4 style="margin:6px 0">${esc(k)}</h4><pre>${esc(s)}</pre>`}).join('')}
+const S=Object.assign({speed:1,step:false,fs:1,wide:false,snd:true},(()=>{try{return JSON.parse(localStorage.getItem('sc-set'))||{}}catch(e){return{}}})());
+let RID=0,paused=false,skip=false,nx=null,cur=0,TT=[];
+const wait=ms=>new Promise(r=>setTimeout(r,skip?0:ms/S.speed)),gate=()=>(skip||!(S.step||paused))?0:new Promise(r=>nx=r),go=()=>{if(nx){const f=nx;nx=null;f()}};
+const tk=()=>S.snd&&sfx.tick();
+function narr(t,i,n){$('#narr').innerHTML=t;$('#prog').style.width=(n?100*i/n:0)+'%'}
+function stop(){RID++;paused=false;skip=false;go();$('#bPa').textContent='Pause'}
+async function seq(items,fn,ms,label){const T=TT[cur],id=++RID,s=T.pos||0;skip=false;for(let k=s;k<items.length;k++){if(id!==RID)return;if(k>s)await gate();if(id!==RID)return;await fn(items[k],k,items.length);if(id!==RID)return;T.pos=k+1;await wait(ms)}if(id===RID){T.done=true;narr('Finished: '+label+'. It stays built until you press Clear. Press Replay to watch it again.',1,1)}}
+function applySet(){const p=document.querySelector('.page');p.style.zoom=S.fs;p.style.maxWidth=S.wide?'none':'';
+ $('#sFs').value=S.fs;$('#sSp').value=S.speed;$('#vSp').textContent=S.speed+'x';$('#sMode').value=S.step?1:0;$('#sWd').checked=S.wide;$('#sSn').checked=S.snd;
+ try{localStorage.setItem('sc-set',JSON.stringify(S))}catch(e){}}
+$('#sFs').oninput=e=>{S.fs=+e.target.value;$('#sPre').value='';applySet()};$('#sSp').oninput=e=>{S.speed=+e.target.value;applySet()};
+$('#sMode').onchange=e=>{S.step=e.target.value==='1';if(!S.step)go();applySet()};$('#sWd').onchange=e=>{S.wide=e.target.checked;applySet()};$('#sSn').onchange=e=>{S.snd=e.target.checked;applySet()};
+$('#sPre').onchange=e=>{const P={laptop:{fs:1,wide:false,speed:1},proj:{fs:1.35,wide:true,speed:.75},mobile:{fs:.85,wide:false,speed:1}}[e.target.value];if(P){Object.assign(S,P);applySet()}};
+$('#bPa').onclick=e=>{paused=!paused;e.target.textContent=paused?'Resume':'Pause';if(!paused)go()};$('#bNx').onclick=go;$('#bSk').onclick=()=>{skip=true;go()};$('#bRe').onclick=()=>{const t=TT[cur];if(t){t.pos=0;t.done=false}show(cur)};
+applySet();
+function buildTabs(d){const code=$('#code').value;
+ TT=[{n:'Findings',h:fin(d.findings||[])}];
+ if(d.tokens)TT.push({n:'Tokens ('+d.tokens.length+')',h:'<div class="split"><div><div class="lab">Source code being scanned</div><pre id="srcv"></pre></div><div><div class="lab">Tokens found</div><div class="card wrap" id="tkw"><table><thead><tr><th>#</th><th>Type</th><th>Value</th><th>Line</th></tr></thead><tbody id="tkb"></tbody></table></div></div></div>',r:()=>runTokens(d.tokens,code)});
+ if(d.ast&&Object.keys(d.ast).length)TT.push({n:'Syntax tree',h:'<div class="card wrap" id="ast"></div>',r:()=>runTree(d.ast)});
+ if(d.symbols)TT.push({n:'Symbols',h:'<div class="card wrap"><table><thead><tr><th>Name</th><th>Type</th><th>Scope</th><th>Line</th><th>Initialized</th></tr></thead><tbody id="smb"></tbody></table></div>',r:()=>runSyms(d.symbols)});
+ if(d.translations)TT.push({n:'Translations',h:'<div id="trn"></div>',r:()=>runTrans(d.translations)});
+ $('#tabs').innerHTML=TT.map((t,k)=>`<button class="btn tab" data-i="${k}">${esc(t.n)}</button>`).join('');
+ $('#panes').innerHTML=TT.map((t,k)=>`<div class="pane">${t.h}</div>`).join('');
+ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(+b.dataset.i));show(0)}
+function show(k){cur=k;stop();document.querySelectorAll('.tab,.pane').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tab')[k].classList.add('on');document.querySelectorAll('.pane')[k].classList.add('on');
+ const t=TT[k];if(!t.r){narr('Pick Tokens, Syntax tree, Symbols or Translations to watch each compiler phase run.',0,1);return}
+ if(t.done){narr('This phase is already built and stays here until you press Clear. Press Replay to watch it again.',1,1);return}
+ narr(t.pos?'Continuing from step '+(t.pos+1)+'...':'Starting...',0,1);t.r()}
+const ms=n=>Math.max(25,Math.min(220,15000/n));
+function runTokens(t,code){const T=TT[cur],b=$('#tkb'),sv=$('#srcv');if(!T.pos){b.innerHTML='';sv.textContent=code;T.p=0}
+ seq(t,(x,k,n)=>{const v=String(x.value),q=code.indexOf(v,T.p||0);
+  if(q>=0){sv.innerHTML='<span class="dn">'+esc(code.slice(0,q))+'</span><mark>'+esc(v)+'</mark>'+esc(code.slice(q+v.length));T.p=q+v.length;const m=sv.querySelector('mark');sv.scrollTop=m.offsetTop-110}
+  b.insertAdjacentHTML('beforeend',`<tr class="new"><td>${k+1}</td><td>${esc(x.type)}</td><td>${esc(x.value)}</td><td>${esc(x.line)}</td></tr>`);$('#tkw').scrollTop=1e5;
+  narr(`Step ${k+1}/${n}: the lexer reads <b>${esc(v)}</b> on line ${esc(x.line)} and labels it <b>${esc(x.type)}</b>.`,k+1,n);tk()},ms(t.length),'lexical analysis')}
+function flat(o,k,d,out,par){const leaf=o===null||typeof o!=='object';out.push({k,d,leaf,par,v:leaf?o:(o.type||o.node_type||o.name||(Array.isArray(o)?'list of '+o.length:''))});if(!leaf)Object.entries(o).forEach(([a,c])=>flat(c,a,d+1,out,k))}
+function runTree(a){const el=$('#ast'),L=[];if(!TT[cur].pos)el.innerHTML='';flat(a,'program',0,L,'');
+ seq(L,(x,k,n)=>{el.insertAdjacentHTML('beforeend',`<div class="nd" style="margin-left:${x.d*18}px"><b>${esc(x.k)}</b>${x.v!==''?' <i>'+esc(x.v)+'</i>':''}</div>`);el.scrollTop=1e5;
+  narr(x.leaf?`Step ${k+1}/${n}: the parser stores the value <b>${esc(x.v)}</b> as <b>${esc(x.k)}</b> inside <b>${esc(x.par)}</b>.`:`Step ${k+1}/${n}: the parser creates the node <b>${esc(x.k)}</b>${x.v?' ('+esc(x.v)+')':''}${x.par?' as a child of <b>'+esc(x.par)+'</b>':' as the root of the tree'}.`,k+1,n);tk()},ms(L.length),'syntax analysis')}
+function runSyms(s){const b=$('#smb');if(!TT[cur].pos)b.innerHTML='';
+ seq(s,(x,k,n)=>{b.insertAdjacentHTML('beforeend',`<tr class="new"><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td>${esc(x.scope)}</td><td>${esc(x.line)}</td><td>${x.init?'yes':'<span class="bad">no</span>'}</td></tr>`);
+  narr(`Step ${k+1}/${n}: the semantic analyzer finds <b>${esc(x.name)}</b> (${esc(x.type)}) in scope <b>${esc(x.scope)}</b> on line ${esc(x.line)}. `+(x.init?'It has a starting value.':'<span class="bad">It is never given a value, so reading it is unsafe.</span>'),k+1,n);tk()},700,'semantic analysis')}
+function runTrans(t){const el=$('#trn'),E=Object.entries(t);if(!TT[cur].pos)el.innerHTML='';
+ seq(E,async([name,v],k,n)=>{const s=typeof v==='string'?v:(v&&(v.code||v.output))||JSON.stringify(v,null,2),h=document.createElement('div');h.dataset.k=k;const old=el.querySelector('[data-k="'+k+'"]');if(old)old.remove();h.innerHTML=`<h4 style="margin:6px 0">${esc(name)}</h4><pre></pre>`;el.appendChild(h);const pre=h.querySelector('pre');
+  narr(`Step ${k+1}/${n}: the transcompiler rewrites the program in <b>${esc(name)}</b>, statement by statement.`,k+1,n);
+  for(let q=0;q<s.length&&!skip;q+=4){pre.textContent=s.slice(0,q+4);if(q%16===0)tk();await wait(10)}pre.textContent=s},900,'translation')}
+async function pdf(){const r=await fetch('/export-pdf',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({findings:last.findings,language:last.language,risk_profile:last.risk_profile})});
+ const u=URL.createObjectURL(await r.blob()),a=document.createElement('a');a.href=u;a.download=`secure_compiler_${last.language}_audit.pdf`;a.click();URL.revokeObjectURL(u)}
+</script>
+{% endblock %}
